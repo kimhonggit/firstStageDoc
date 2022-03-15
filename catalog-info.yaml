@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: "testDoc"
-  description: "this is my first Doc"
+  description: "this is my first Documentation"
   annotations:
     github.com/project-slug: kimhonggit/firstStageDoc
     backstage.io/techdocs-ref: dir:.
