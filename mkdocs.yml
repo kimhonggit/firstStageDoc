@@ -3,6 +3,7 @@ site_description: "this is my first Doc"
 
 nav:
   - Introduction: index.md
+  - Getting Started: getstart.md
 
 plugins:
   - techdocs-core
