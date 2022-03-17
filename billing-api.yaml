@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: Billing Api
+  name: Billing-Api
   description: The official Spotify REST API
 spec:
   type: openapi
