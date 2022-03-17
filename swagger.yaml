@@ -1,0 +1,337 @@
+swagger: '2.0'
+info:
+  title: Billing API
+  description: Billing API enables users to view and download invoices. It will also enable user to sync invoices from GTV (TRACT) to Salesforce.
+  version: v1
+host: 'loadBalancerEnv.ecg-ebs.com'
+basePath: /ebs-{environment}-billing/api/{version}
+schemes:
+  - https
+x-amf-baseUriParameters:
+  loadBalancerEnv:
+    description: msapi-nonprod route request to DEV and QA, msapi routes request to PROD.
+    enum:
+      - msapi-nonprod
+      - msapi
+  environment:
+    description: Development, Acceptance, Production
+    enum:
+      - dev
+      - qa
+      - prod
+paths:
+  /invoices: {}
+  /invoices/{memberId}:
+    x-amf-description: Endpoint exposed to extract invoice of a given customer.
+    get:
+      description: Method exposed to fetch invoice details of a customer.
+      parameters:
+        - name: vertical
+          description: For combine member+vertical to figure out the MemberUnitId
+          required: true
+          in: query
+          enum:
+            - AU
+            - AS
+            - AM
+            - RE
+            - PR
+            - OP
+            - OT
+          type: string
+        - name: accountId
+          description: Local Platform Id of the customer
+          required: true
+          in: query
+          type: string
+        - name: memberId
+          description: Indicates the member id of the request country.
+          required: true
+          in: path
+          enum:
+            - MPNLD
+            - GTAUS
+            - EBAYK
+            - THBE2
+            - ECITA
+            - ECGDK
+          type: string
+        - name: client_id
+          required: true
+          in: header
+          type: string
+        - name: client_secret
+          required: true
+          in: header
+          type: string
+        - name: x-transaction-id
+          in: header
+          type: string
+          pattern: ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
+      responses:
+        '200':
+          description: ''
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/invoice'
+        '400':
+          description: bad request (invalid json, malformed request, missing mandatory values)
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+        '404':
+          description: Not Found (Returned when server dont know the resource being invoked.)
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+        '500':
+          description: 500 Internal server error, something went wrong while processing the message
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+  /invoices/{memberId}/{invoiceId}:
+    parameters:
+      - name: memberId
+        description: Indicates the member id of the request country.
+        required: true
+        in: path
+        enum:
+          - MPNLD
+          - GTAUS
+          - EBAYK
+          - THBE2
+          - ECITA
+          - ECGDK
+        type: string
+      - name: invoiceId
+        description: Unique ID to identify an Invoice.
+        required: true
+        in: path
+        type: string
+  /invoices/{memberId}/{invoiceId}/download:
+    get:
+      description: Endpoint exposed to download invoice in pdf format.
+      parameters:
+        - name: memberId
+          description: Indicates the member id of the request country.
+          required: true
+          in: path
+          enum:
+            - MPNLD
+            - GTAUS
+            - EBAYK
+            - THBE2
+            - ECITA
+            - ECGDK
+          type: string
+        - name: invoiceId
+          description: Unique ID to identify an Invoice.
+          required: true
+          in: path
+          type: string
+        - name: client_id
+          required: true
+          in: header
+          type: string
+        - name: client_secret
+          required: true
+          in: header
+          type: string
+        - name: x-transaction-id
+          in: header
+          type: string
+          pattern: ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
+      responses:
+        '200':
+          description: ''
+          x-amf-mediaType: application/pdf
+          schema:
+            example: examples/invoice-13851215.pdf
+            type: file
+            x-amf-fileTypes:
+              - application/pdf
+        '400':
+          description: bad request (invalid json, malformed request, missing mandatory values)
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+        '404':
+          description: Not Found (Returned when server dont know the resource being invoked.)
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+        '500':
+          description: 500 Internal server error, something went wrong while processing the message
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+  /invoices/{memberId}/{invoiceId}/uploadtosf:
+    put:
+      description: Get Invoice from GTV and load into SF as document
+      parameters:
+        - name: memberId
+          description: Indicates the member id of the request country.
+          required: true
+          in: path
+          enum:
+            - MPNLD
+            - GTAUS
+            - EBAYK
+            - THBE2
+            - ECITA
+            - ECGDK
+          type: string
+        - name: invoiceId
+          description: Unique ID to identify an Invoice.
+          required: true
+          in: path
+          type: string
+        - name: client_id
+          required: true
+          in: header
+          type: string
+        - name: client_secret
+          required: true
+          in: header
+          type: string
+        - name: x-transaction-id
+          in: header
+          type: string
+          pattern: ^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$
+      responses:
+        '200':
+          description: ''
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/upload'
+        '400':
+          description: bad request (invalid json, malformed request, missing mandatory values)
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+        '404':
+          description: Not Found (Returned when server dont know the resource being invoked.)
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+        '500':
+          description: 500 Internal server error, something went wrong while processing the message
+          x-amf-mediaType: application/json
+          schema:
+            $ref: '#/definitions/commonAPIError'
+definitions:
+  invoice:
+    example:
+      - invoice_type: standard
+        id: '263200'
+        amount: 37.22
+        status: CLOSED
+        invoice_num: EKA1718680
+        occurred_on: '2017-12-14T00:00:00+01:00'
+        due_date: '2017-12-14'
+        amount_to_pay: 0
+        late_fee_charged: false
+      - invoice_type: standard
+        id: '263245'
+        amount: 37.66
+        status: CLOSED
+        invoice_num: EKA1718719
+        occurred_on: '2017-12-14T00:00:00+01:00'
+        due_date: '2017-12-14'
+        amount_to_pay: 0
+        late_fee_charged: false
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+      required:
+        - invoice_type
+        - id
+        - status
+        - invoice_num
+        - occurred_on
+        - due_date
+        - amount_to_pay
+        - late_fee_charged
+      properties:
+        invoice_type:
+          example: manual
+          type: string
+        id:
+          example: '1438752'
+          type: string
+        status:
+          example: CLOSED
+          type: string
+        invoice_num:
+          example: EKA1814386
+          type: string
+        occurred_on:
+          example: '2018-03-19T00:00:00+01:00'
+          type: string
+          format: date-time
+        due_date:
+          example: '2018-03-19'
+          type: string
+          format: date
+        amount_to_pay:
+          example: 0
+          type: number
+        late_fee_charged:
+          example: false
+          type: boolean
+  commonAPIError:
+    x-amf-examples:
+      example_0:
+        errorCode: 400:BAD_REQUEST
+        errorMessage: Bad Request sent to server.
+        errorDescription: The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications.
+        errorDateTime: 2021-01-08T11:39:55+0100
+      ex1:
+        errorCode: '400 : BAD_REQUEST'
+        errorMessage: '400 : BAD_REQUEST'
+        errorDescription: HTTP GET on resource <<api endpoint>> failed due to malformed request
+        errorDateTime: '2020-05-07T10:34:18'
+      example_5:
+        errorCode: '404 : NOT_FOUND'
+        errorMessage: The server has not found anything matching the Request-URI
+        errorDescription: /
+        errorDateTime: '2020-05-07T09:39:14'
+      example_6:
+        errorCode: '500 : UNKNOWN'
+        errorMessage: Upstream service unable to fulfil request.
+        errorDescription: 'MediaType cannot be parsed: xmlecmascript'
+        errorDateTime: '2020-05-07T10:32:35'
+    type: object
+    additionalProperties: true
+    required:
+      - errorCode
+      - errorMessage
+      - errorDescription
+      - errorDateTime
+    properties:
+      errorCode:
+        description: HTTP Status Code and explanation
+        example: 400:BAD_REQUEST
+        type: string
+      errorMessage:
+        description: error Message
+        example: Bad Request sent to server.
+        type: string
+      errorDescription:
+        description: Details of the error.
+        example: The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request without modifications
+        type: string
+      errorDateTime:
+        description: Date time when the issue occured.
+        example: 2021-01-08T11:39:55+0100
+        type: string
+  upload:
+    type: object
+    additionalProperties: true
+    required:
+      - id
+    properties:
+      id:
+        example: abc123
+        type: string
