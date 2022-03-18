@@ -5,9 +5,22 @@ info:
     enable user to sync invoices from GTV (TRACT) to Salesforce.
   version: v1
 servers:
-- url: https://{loadBalancerEnv}.ecg-ebs.com/ebs-{environment}-billing/api/{version}
+  - url: https://{loadBalancerEnv}.ecg-ebs.com/ebs-{environment}-billing/api/{version}
+    variables:
+      loadBalancerEnv:
+        description: msapi-nonprod route request to DEV and QA, msapi routes request to PROD.
+        default: msapi-nonprod
+        enum: [msapi-nonprod, msapi]
+      environment:
+        default: dev    # Dev server
+        enum:
+          - dev         # Dev server
+          - qa     # Staging server
+          - prod # Production server
+      version:
+        default: v1
 paths:
-  /invoices: {}
+  
   /invoices/{memberId}:
     get:
       description: Method exposed to fetch invoice details of a customer.
@@ -94,7 +107,7 @@ paths:
                 $ref: '#/components/schemas/commonAPIError'
           x-amf-mediaType: application/json
     x-amf-description: Endpoint exposed to extract invoice of a given customer.
-  /invoices/{memberId}/{invoiceId}: {}
+ 
   /invoices/{memberId}/{invoiceId}/download:
     get:
       description: Endpoint exposed to download invoice in pdf format.
