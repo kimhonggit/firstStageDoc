@@ -1,47 +1,33 @@
 apiVersion: backstage.io/v1alpha1
-
-
-
-
 kind: System
 metadata:
- namespace: flash
- name: finance-and-billing
- description: The Finance and Billing (Flash) solution enables the Sales, Finance, and Cental teams to focus on selling and securing revenue.
- annotations:
-   backstage.io/techdocs-ref: dir:.
-   adevinta.com/description-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/product.md
-   adevinta.com/history-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/reference/history.md
-   adevinta.com/numbers-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/reference/key-numbers.md
-   adevinta.com/tech-roadmap-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/reference/tech-roadmap.md
+  namespace: flash
+  name: finance-and-billing
+  description: The Finance and Billing (Flash) solution enables the Sales, Finance, and Cental teams to focus on selling and securing revenue.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    adevinta.com/description-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/product.md
+    adevinta.com/history-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/reference/history.md
+    adevinta.com/numbers-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/reference/key-numbers.md
+    adevinta.com/tech-roadmap-ref: https://github.es.ecg.tools/Catalyst/documentation-billing/blob/main/docs/reference/tech-roadmap.md
 spec:
- owner: flash/Flash
- domain: caps/sales-and-billing-and-service
- lifecycle: production
-
+  owner: flash/Flash
+  domain: caps/sales-and-billing-and-service
+  lifecycle: production
 #  contextDiagram:
-
 #    pageId: 274641143
-
 #    attachmentName: EBS Minerva ACM Context Diagram.png
- techRadarOrg: EBS Sales/Finace
-# adoption:
+  techRadarOrg: EBS Sales/Finace
+ # adoption:
+ #   - ek
+ #   - gtau
+ #   - gtuk
+ #   - kjca
+ #   - kjit
+ #   - mo
+ #   - mp
+ #   - tw
 
-#   - ek
-
-#   - gtau
-
-#   - gtuk
-
-#   - kjca
-
-#   - kjit
-
-#   - mo
-
-#   - mp
-
-#   - tw
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -53,4 +39,4 @@ spec:
   lifecycle: production
   owner: kimhong
   definition:
-    $text: https://github.com/kimhonggit/firstStageDoc/blob/master/Apis/Billing-Sales/swagger.yaml
+    $text: https://github.com/kimhonggit/firstStageDoc/blob/master/Apis/swagger.yaml
