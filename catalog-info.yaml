@@ -39,4 +39,4 @@ spec:
   lifecycle: production
   owner: kimhong
   definition:
-    $text: https://github.com/kimhonggit/firstStageDoc/blob/master/Apis/swagger.yaml
+    $text: https://github.com/kimhonggit/firstStageDoc/blob/master/Apis/billing-api/swagger.yaml
