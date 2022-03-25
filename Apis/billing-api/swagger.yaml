@@ -4,6 +4,10 @@ info:
   description: Billing API enables users to view and download invoices. It will also
     enable user to sync invoices from GTV (TRACT) to Salesforce.
   version: v1
+  contact: 
+   name: EBS Customer Support
+   url: 'https://ebayclassifiedsgroup.slack.com'
+   email: email@example.com
 servers:
   - description: msapi-nonprod route request to DEV and QA, msapi routes request to PROD.
     url: https://{loadBalancerEnv}.ecg-ebs.com/ebs-{environment}-billing/api/{version}
